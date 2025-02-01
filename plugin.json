@@ -1,0 +1,10 @@
+{
+    "id": "UA",
+    "name": "UA Movies",
+    "version": "1.0",
+    "author": "maksimus351",
+    "description": "UA Movies plugin for Lampa, sources: uakino.me, rezka-ua.org",
+    "url": "https://github.com/maksimus351/UA-kino.js.git",
+    "source": "https://github.com/maksimus351/UA-kino.js.git",
+    "type": "web"
+}

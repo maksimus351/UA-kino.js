@@ -1,51 +1,49 @@
-function getMoviesFromUakino() {
-    const url = "https://uakino.me/";
-    return fetch(url)
-        .then(response => response.text())
-        .then(html => {
-            const movies = [];
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const movieElements = doc.querySelectorAll(".entry-title");
-            movieElements.forEach((movie) => {
-                movies.push(movie.textContent.trim());
-            });
-            return movies;
-        });
-}
-    var myIp = '';
-function getMoviesFromRezka() {
-    const url = "https://rezka-ua.org/";
-    return fetch(url)
-        .then(response => response.text())
-        .then(html => {
-            const movies = [];
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const movieElements = doc.querySelectorAll(".b-post__title");
-            movieElements.forEach((movie) => {
-                movies.push(movie.textContent.trim());
-            });
-            return movies;
-        });
-}
+//01.02.2025 - Fix
 
-function chooseSource() {
-    const source = prompt("Choose the source for movies:\n1. uakino.me\n2. rezka-ua.org\nEnter 1 or 2:");
+(function () {
+    'use strict';
 
-    if (source === "1") {
-        getMoviesFromUakino().then(movies => {
-            alert("Movies from uakino.me: " + movies.join("\n"));
-        });
-    } else if (source === "2") {
-        getMoviesFromRezka().then(movies => {
-            alert("Movies from rezka-ua.org: " + movies.join("\n"));
-        });
-    } else {
-        alert("Invalid choice. Please select 1 or 2.");
+    function startsWith(str, searchString) {
+      return str.lastIndexOf(searchString, 0) === 0;
     }
-}
 
+    function endsWith(str, searchString) {
+      var start = str.length - searchString.length;
+      if (start < 0) return false;
+      return str.indexOf(searchString, start) === start;
+    }
+
+    var myIp = '';
+
+    function decodeSecret(input, password) {
+      var result = '';
+      password = password || Lampa.Storage.get('online_mod_secret_password', '') + '';
+
+      if (input && password) {
+        var hash = Lampa.Utils.hash(password);
+
+        while (hash.length < input.length) {
+          hash += hash;
+        }
+
+        var i = 0;
+
+        while (i < input.length) {
+          result += String.fromCharCode(input[i] ^ hash.charCodeAt(i));
+          i++;
+        }
+      }
+
+      return result;
+    }
+
+    function checkDebug() {
+      var res = false;
+      var origin = window.location.origin || '';
+      decodeSecret([85, 77, 93, 87, 89, 71, 87, 30, 86, 89, 88, 88, 88, 81, 12, 70, 66, 80, 68, 89, 80, 24, 67, 68, 13, 92, 88, 90, 68, 88, 69, 92, 82, 24, 83, 90]).split(';').forEach(function (s) {
+        res |= endsWith(origin, s);
+      });
+      return !res;
     }
 
     function isDebug() {
